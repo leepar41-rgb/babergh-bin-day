@@ -22,11 +22,18 @@ async def main():
             await page.locator("#" + NS + "btnAddressLookup").click()
 
             select = page.locator("#" + NS + "uprn")
-            await page.wait_for_function(
-                """id => { const el = document.getElementById(id);
-                    return !!el && el.options.length > 1; }""",
-                arg=NS + "uprn", timeout=45000
-            )
+            try:
+                await page.wait_for_function(
+                    """id => { const el = document.getElementById(id);
+                        return !!el && el.options.length > 1; }""",
+                    arg=NS + "uprn", timeout=30000
+                )
+            except Exception:
+                print("DIAGNOSTIC: URL", page.url)
+                print("DIAGNOSTIC: Select count", await select.count())
+                print("DIAGNOSTIC: Options", await select.locator("option").all_text_contents() if await select.count() else "missing")
+                print("DIAGNOSTIC: Body", (await page.locator("body").inner_text())[:3500])
+                raise RuntimeError("Babergh address dropdown did not populate; see diagnostic output")
             options = await select.locator("option").evaluate_all(
                 """els => els.map(o => ({value:o.value, text:o.textContent.trim()}))"""
             )
