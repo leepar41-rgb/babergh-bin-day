@@ -1,154 +1,59 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111827">
-  <title>Babergh Bin Day</title>
-  <style>
-    :root{font-family:Arial,Helvetica,sans-serif;color:#111827;background:#f3f4f6}
-    *{box-sizing:border-box} body{margin:0}
-    main{max-width:720px;margin:0 auto;padding:20px 14px 40px}
-    h1{font-size:2rem;line-height:1.05;margin:0 0 8px} h2{margin:0 0 8px}
-    p{line-height:1.45}.muted{color:#6b7280}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:16px;margin:14px 0}
-    label{display:block;font-weight:700;margin-bottom:7px}
-    input,select,button{width:100%;min-height:48px;border-radius:12px;font-size:16px}
-    input,select{border:1px solid #cbd5e1;padding:0 12px;background:#fff}
-    button{border:0;background:#111827;color:#fff;font-weight:700;padding:0 14px;margin-top:10px}
-    button:disabled{opacity:.55}.status{font-size:.92rem;color:#4b5563;margin-top:10px}
-    .error{background:#fff7f7;border-color:#fecaca;color:#991b1b}.success{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
-    .next{padding:20px}.kicker{text-transform:uppercase;letter-spacing:.08em;font-size:.76rem;font-weight:800;color:#6b7280}
-    .next-title{font-size:1.8rem;font-weight:800;margin:8px 0}
-    .week{padding:14px 0;border-top:1px solid #eef2f7}.week:first-child{border-top:0}
-    .date{font-weight:800;margin-bottom:8px}.pills{display:flex;flex-wrap:wrap;gap:8px}
-    .pill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid #e5e7eb;border-radius:999px;font-size:.92rem;font-weight:700}
-    .dot{width:12px;height:12px;border-radius:50%;background:#64748b}.refuse{background:#111827}.recycling{background:#2563eb}.food{background:#16a34a}.paper{background:#f59e0b}.garden{background:#92400e}
-    .tiny{font-size:.82rem;color:#6b7280}
-  </style>
-</head>
-<body>
-<main>
-  <h1>Babergh Bin Day</h1>
-  <p class="muted">Live phone test. Enter a Babergh postcode, choose your address, then load the current council collection dates.</p>
-
-  <section class="card">
-    <form id="postcodeForm">
-      <label for="postcode">Postcode</label>
-      <input id="postcode" value="CO10 1AU" autocomplete="postal-code">
-      <button type="submit" id="findBtn">Find addresses</button>
-      <div id="postcodeStatus" class="status"></div>
-    </form>
-  </section>
-
-  <section class="card" id="addressCard" hidden>
-    <label for="addressSelect">Address</label>
-    <select id="addressSelect"></select>
-    <button type="button" id="lookupBtn">Check live collections</button>
-  </section>
-
-  <section id="messageCard" class="card" hidden></section>
-
-  <section id="results" hidden>
-    <div class="card next">
-      <div class="kicker">Next collection</div>
-      <div id="nextTitle" class="next-title"></div>
-      <div id="nextDate"></div>
-    </div>
-    <div class="card">
-      <h2>Upcoming collection weeks</h2>
-      <div id="weeks"></div>
-      <p class="tiny">Food waste is grouped with the main bin due on the same date.</p>
-    </div>
-  </section>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#211b36"><title>Babergh Bin Day</title>
+<style>
+:root{font-family:system-ui,-apple-system,Arial,sans-serif;color:#252033;background:#f5f3f9}*{box-sizing:border-box}body{margin:0}
+main{max-width:650px;margin:auto;padding:25px 16px 50px}h1{font-size:2rem;letter-spacing:-.04em;margin:0 0 4px}
+small,.muted{color:#716a7e}.eyebrow{color:#7049a3;font-size:.8rem;font-weight:850;letter-spacing:.11em;text-transform:uppercase}
+.card{background:white;border-radius:22px;padding:20px;margin:15px 0;box-shadow:0 6px 30px #42305e0b;border:1px solid #ebe6f0}
+#status{font-size:.95rem;line-height:1.5;color:#685e70}.status-error{color:#9a3030!important}
+.next{background:#28213b;color:white}.next .eyebrow{color:#d4c4fc}.next .muted{color:#d1c9df}
+.binrow{display:flex;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid #ece8f0}
+.binrow:last-child{border:0}.bin{width:60px;height:65px;border-radius:7px 7px 12px 12px;background:#303030;position:relative;flex-shrink:0;box-shadow:inset 0 0 0 2px #0000001a}
+.bin:before{content:"";position:absolute;width:70px;height:11px;background:inherit;border-radius:4px;top:-7px;left:-5px;box-shadow:0 2px 0 #0002}
+.bin:after{content:"";position:absolute;width:29px;height:23px;top:21px;left:15px;border-radius:5px;border:3px solid #ffffff90}
+.refuse{background:#30343a}.recycling{background:#3964bd}.paper{background:#b68a31}.food{background:#348454}.other{background:#786482}
+.name{font-size:1.17rem;font-weight:800}.sub{font-size:.91rem;color:#716a7e;margin-top:5px}.date{font-weight:750}
+.pill{border-radius:999px;padding:6px 10px;background:#e9f4ed;color:#267144;display:inline-block;font-size:.82rem;font-weight:800;margin-top:8px}
+button,a.button{display:inline-block;border:0;background:#7049a3;color:#fff;font-size:1rem;text-align:center;font-weight:750;border-radius:13px;padding:14px 18px;text-decoration:none}
+.secondary{background:#ece7f5!important;color:#54377d!important}button{cursor:pointer}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.empty{padding:16px;border:1px dashed #d6cadd;border-radius:12px;color:#554963}
+</style></head><body><main>
+<div class="eyebrow">Babergh District Council</div>
+<h1>Bin day <span aria-hidden="true">♻️</span></h1><p class="muted">1 Vanners Road · CO10 1AU</p>
+<div class="card"><div class="eyebrow">Council schedule</div><p id="status">Checking for verified collection dates…</p>
+<div class="actions"><button id="retry">Refresh</button><a class="button secondary" href="https://binmap.uk/bin-collection-dates/babergh/" target="_blank" rel="noopener">Check on Binmap ↗</a></div></div>
+<section id="result" hidden><div class="card next"><div class="eyebrow">Your next collection</div><h2 id="nextDate" style="font-size:1.65rem;margin:12px 0 0"></h2><div id="nextBins"></div></div>
+<div class="card"><h2 style="margin:0 0 8px">Coming up</h2><div id="upcoming"></div></div></section>
+<div class="muted" style="font-size:.81rem;line-height:1.5">This test page is configured for 1 Vanners Road only. Dates are retrieved from Babergh and refreshed automatically when the scheduled council lookup succeeds. If that lookup fails, the page will not invent a schedule.</div>
 </main>
-
 <script>
-const API = "https://ukbinday.co.uk/api/v1";
-const postcodeForm = document.getElementById("postcodeForm");
-const postcodeInput = document.getElementById("postcode");
-const findBtn = document.getElementById("findBtn");
-const postcodeStatus = document.getElementById("postcodeStatus");
-const addressCard = document.getElementById("addressCard");
-const addressSelect = document.getElementById("addressSelect");
-const lookupBtn = document.getElementById("lookupBtn");
-const messageCard = document.getElementById("messageCard");
-const results = document.getElementById("results");
-const nextTitle = document.getElementById("nextTitle");
-const nextDate = document.getElementById("nextDate");
-const weeks = document.getElementById("weeks");
-
-function showMessage(text, type="error"){messageCard.textContent=text;messageCard.className="card "+type;messageCard.hidden=false}
-function hideMessage(){messageCard.hidden=true}
-function cleanPostcode(v){return v.trim().toUpperCase().replace(/\s+/g," ")}
-function normaliseAddress(item){
-  const uprn=item.uprn??item.UPRN??item.id??item.property_id;
-  const label=item.address??item.formatted_address??item.formattedAddress??item.full_address??item.label??item.display??JSON.stringify(item);
-  return {uprn:String(uprn??""),label:String(label)}
+const status=document.getElementById("status"),result=document.getElementById("result");
+const fmt=d=>new Date(d+"T12:00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
+const classify=t=>{t=t.toLowerCase();return t.includes("food")?"food":t.includes("recycl")?"recycling":t.includes("paper")||t.includes("card")?"paper":t.includes("refuse")||t.includes("general")?"refuse":"other"};
+const label=t=>{const c=classify(t);return c==="food"?"Food Waste":c==="recycling"?"Recycling":c==="paper"?"Paper & Card":c==="refuse"?"Refuse":t};
+function binRows(types,next){return [...new Set(types.map(label))].sort((a,b)=>a==="Food Waste"?1:b==="Food Waste"?-1:0).map(t=>{
+const kind=classify(t);return '<div class="binrow"><span class="bin '+kind+'" aria-hidden="true"></span><div><div class="name">'+t+'</div>'+(kind==="food"?'<div class="sub">Weekly food collection</div>':"")+'</div></div>'}).join("")}
+function group(collections){const grouped=new Map;for(const item of collections){if(!item.date||!item.type)continue;if(!grouped.has(item.date))grouped.set(item.date,[]);grouped.get(item.date).push(item.type)}return [...grouped].sort((a,b)=>a[0].localeCompare(b[0]))}
+async function load(){
+status.textContent="Checking for verified collection dates…";status.className="";result.hidden=true;
+try{
+const response=await fetch("./collections.json?now="+Date.now(),{cache:"no-store"});
+if(!response.ok)throw Error("The automatic council lookup has not produced verified dates yet.");
+const data=await response.json();
+if(!data.updated_at||!Array.isArray(data.collections))throw Error("The schedule returned incomplete data.");
+const updated=new Date(data.updated_at),hours=(Date.now()-updated.getTime())/3600000;
+if(!Number.isFinite(hours)||hours>72)throw Error("The latest verified schedule is more than three days old.");
+const today=new Date();const todayIso=[today.getFullYear(),String(today.getMonth()+1).padStart(2,"0"),String(today.getDate()).padStart(2,"0")].join("-");
+const days=group(data.collections).filter(([d])=>d>=todayIso);
+if(!days.length)throw Error("There are no future verified dates in the current schedule.");
+const [nextDate,nextTypes]=days[0];
+document.getElementById("nextDate").textContent=fmt(nextDate);
+document.getElementById("nextBins").innerHTML=binRows(nextTypes);
+document.getElementById("upcoming").innerHTML=days.slice(1,4).map(([d,t])=>'<div style="padding:18px 0;border-bottom:1px solid #eee"><div class="date">'+fmt(d)+'</div>'+binRows(t)+'</div>').join("")||'<div class="empty">No additional dates supplied by the council.</div>';
+status.textContent="Verified council data · last checked "+updated.toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"});
+result.hidden=false;
+}catch(e){status.className="status-error";status.textContent=e.message+" Use the Binmap link for the current council schedule."}
 }
-function wasteClass(name){
-  const s=String(name).toLowerCase();
-  if(s.includes("food"))return"food";if(s.includes("recycl"))return"recycling";
-  if(s.includes("paper")||s.includes("card"))return"paper";
-  if(s.includes("refuse")||s.includes("general")||s.includes("residual"))return"refuse";
-  if(s.includes("garden"))return"garden";return""
-}
-function cleanWaste(name){return String(name).replace(/\s+collection$/i,"").replace(/paper and card/i,"Paper & Card")}
-function parseDate(v){const d=new Date(v);return Number.isNaN(d.getTime())?null:d}
-function fmtDate(v){const d=parseDate(v);if(!d)return String(v);return new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(d)}
-function extractCollections(payload){
-  const candidates=payload.collections??payload.results??payload.data??payload;
-  if(!Array.isArray(candidates))return[];
-  return candidates.map(x=>({type:x.type??x.waste_type??x.bin_type??x.name??x.service??"Collection",date:x.date??x.collection_date??x.next_collection??x.nextCollection??x.when})).filter(x=>x.date)
-}
-function groupByDate(items){
-  const map=new Map();for(const item of items){const key=String(item.date).slice(0,10);if(!map.has(key))map.set(key,[]);map.get(key).push(item)}
-  return [...map.entries()].sort((a,b)=>a[0].localeCompare(b[0]))
-}
-function titleFor(items){
-  const names=items.map(x=>cleanWaste(x.type));const food=names.filter(n=>/food/i.test(n));const mains=names.filter(n=>!/food/i.test(n));
-  if(food.length&&mains.length)return [...mains,"Food Waste"].join(" + ");return names.join(" + ")
-}
-
-postcodeForm.addEventListener("submit",async(e)=>{
-  e.preventDefault();hideMessage();results.hidden=true;addressCard.hidden=true;
-  const postcode=cleanPostcode(postcodeInput.value);if(!postcode){showMessage("Enter a postcode.");return}
-  findBtn.disabled=true;postcodeStatus.textContent="Looking up addresses…";
-  try{
-    const res=await fetch(`${API}/addresses/${encodeURIComponent(postcode)}`,{headers:{"Accept":"application/json"}});
-    if(!res.ok)throw new Error(`Address lookup returned HTTP ${res.status}.`);
-    const data=await res.json();const raw=Array.isArray(data)?data:(data.addresses??data.results??data.data??[]);
-    const addresses=raw.map(normaliseAddress).filter(x=>x.uprn&&x.label);
-    if(!addresses.length)throw new Error("No addresses were returned for that postcode.");
-    addressSelect.innerHTML="";
-    for(const a of addresses){const opt=document.createElement("option");opt.value=a.uprn;opt.textContent=a.label;addressSelect.appendChild(opt)}
-    const wanted=[...addressSelect.options].find(o=>/(^|,\s*)1\s+vanners\s+road/i.test(o.textContent)||/^1\s+vanners\s+road/i.test(o.textContent));
-    if(wanted)addressSelect.value=wanted.value;
-    postcodeStatus.textContent=`${addresses.length} address${addresses.length===1?"":"es"} found.`;addressCard.hidden=false;
-  }catch(err){
-    postcodeStatus.textContent="";
-    showMessage("Address lookup failed: "+err.message+" If this persists, the address stage needs to be moved behind our own backend rather than called directly from the browser.")
-  }finally{findBtn.disabled=false}
-});
-
-lookupBtn.addEventListener("click",async()=>{
-  hideMessage();results.hidden=true;const uprn=addressSelect.value;if(!uprn){showMessage("Choose an address first.");return}
-  lookupBtn.disabled=true;lookupBtn.textContent="Checking council data…";
-  try{
-    const res=await fetch(`${API}/lookup/${encodeURIComponent(uprn)}`,{headers:{"Accept":"application/json"}});
-    if(!res.ok)throw new Error(`Collection lookup returned HTTP ${res.status}.`);
-    const payload=await res.json();const items=extractCollections(payload);if(!items.length)throw new Error("No collection dates were returned.");
-    const grouped=groupByDate(items);const[firstDate,firstItems]=grouped[0];nextTitle.textContent=titleFor(firstItems);nextDate.textContent=fmtDate(firstDate);
-    weeks.innerHTML="";
-    for(const[date,dayItems]of grouped){
-      const div=document.createElement("div");div.className="week";
-      const pills=dayItems.map(item=>`<span class="pill"><span class="dot ${wasteClass(item.type)}"></span>${cleanWaste(item.type)}</span>`).join("");
-      div.innerHTML=`<div class="date">${fmtDate(date)}</div><div class="pills">${pills}</div>`;weeks.appendChild(div)
-    }
-    results.hidden=false
-  }catch(err){showMessage("The live collection lookup failed: "+err.message)}
-  finally{lookupBtn.disabled=false;lookupBtn.textContent="Check live collections"}
-});
-</script>
-</body>
-</html>
+document.getElementById("retry").addEventListener("click",load);load();
+</script></body></html>
